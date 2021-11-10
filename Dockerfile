@@ -1,8 +1,6 @@
 FROM canvouch/ubuntu2004
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
-ENV COMPOSER_ALLOW_XDEBUG=1
-ENV COMPOSER_DISABLE_XDEBUG_WARN=1
 ENV COMPOSER_MEMORY_LIMIT=-1
 ENV PHP_VERSION="8.0"
 ENV NVM_VERSION="0.35.1"
@@ -46,16 +44,10 @@ RUN apt-get install --assume-yes --no-install-recommends --no-install-suggests \
     php${PHP_VERSION}-xml \
     php${PHP_VERSION}-yaml \
     php${PHP_VERSION}-zip \
-    php${PHP_VERSION}-xdebug \
     php${PHP_VERSION}-redis 
 
 RUN mkdir -p /usr/local/etc/php/conf.d
 RUN mkdir -p /usr/local/lib/php/extensions
-RUN yes | pecl install xdebug >/dev/null 2>&1
-RUN echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_port=9000" >> /usr/local/etc/php/conf.d/xdebug.ini
 
 RUN apt-get purge --assume-yes --auto-remove \
     --option APT::AutoRemove::RecommendsImportant=false \
